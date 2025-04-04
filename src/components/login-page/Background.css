@@ -49,6 +49,6 @@ section {
   }
 
   section span:hover {
-    background: rgb(71, 83, 174);
+    background: rgba(152, 144, 255, 0.8);
     transition: 0s;
   }
