@@ -1,13 +1,57 @@
-import React, { Component } from 'react'
 import './Login.css'
 import Background from './login-page/Background'
-export default class Login extends Component {
-  render() {
-    return (
-      <>
-        <Background />
-        <div className="container">
-          <div className="logo">Vajra</div>
+import { useState } from 'react';
+import { useWeb3React } from '@web3-react/core';
+import { InjectedConnector } from '@web3-react/injected-connector';
+import { BrowserProvider } from 'ethers';
+
+// Injected connector for MetaMask
+const injected = new InjectedConnector({ supportedChainIds: [1, 3, 4, 5, 42] });
+
+// Helper function to get the library for Web3ReactProvider
+function getLibrary(provider) {
+  return new BrowserProvider(provider);
+}
+
+export default function Login() {
+  const { activate, deactivate, active, account } = useWeb3React();
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Handle MetaMask connection
+  const connectMetaMask = async () => {
+    setIsLoading(true);
+    try {
+      // Check if MetaMask extension is installed
+      if (!window.ethereum) {
+        setErrorMessage('MetaMask extension not detected. Redirecting to install page...');
+        window.open('https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn', '_blank');
+        return;
+      }
+      
+      await activate(injected);
+      setErrorMessage('');
+    } catch (error) {
+      if (error.message.includes('No Ethereum provider was found')) {
+        setErrorMessage('MetaMask extension not detected. Please install MetaMask first.');
+      } else {
+        setErrorMessage('Failed to connect to MetaMask. Please try again.');
+      }
+    }
+    setIsLoading(false);
+  };
+
+  // Disconnect MetaMask
+  const disconnectMetaMask = () => {
+    deactivate();
+    setErrorMessage('');
+  };
+
+  return (
+    <>
+      <Background />
+      <div className="container">
+        <div className="logo">Vajra</div>
         <form>
           <div className="input-group">
             <label htmlFor="email">Email</label>
@@ -22,10 +66,21 @@ export default class Login extends Component {
         </form>
         <div className="link">New here?</div>
         <div className="social-login">
-          <button className="social-btn metamask">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" className="wallet-icon" />
-            Connect with MetaMask
-          </button>
+          <div>
+            {!active ? (
+              <button className="social-btn metamask" onClick={connectMetaMask} disabled={isLoading}>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" className="wallet-icon" />
+                {isLoading ? 'Connecting...' : 'Connect with MetaMask'}
+              </button>
+            ) : (
+              <div>
+                <p>Connected Account: {account}</p>
+                <button onClick={disconnectMetaMask}>Disconnect</button>
+              </div>
+            )}
+            {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+          </div>
+
           {/* <button className="social-btn walletconnect">
             <img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/WalletConnect_Logo.png" alt="WalletConnect" className="wallet-icon" />
             WalletConnect
@@ -35,8 +90,7 @@ export default class Login extends Component {
             Coinbase Wallet
           </button> */}
         </div>
-        </div>
-      </>
-    )
-  }
+      </div>
+    </>
+  );
 }

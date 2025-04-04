@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+VAJRA
+=======
+<<<<<<< HEAD
 # vajra
 =======
 # Getting Started with Create React App
@@ -72,3 +75,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 >>>>>>> bf4d83a29d8a7c367ea87b8038a0cd5c433ac3e3
+>>>>>>> f68aa0a0d6ca8d29561cb7a6bd618d03b4425626
