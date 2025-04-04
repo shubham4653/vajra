@@ -47,3 +47,48 @@
 .buy-btn:hover {
   background-color: #45a049;
 }
+
+.amount-control {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.amount-btn {
+  width: 44px;
+  height: 44px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+
+.amount-btn:hover {
+  background: #e0e0e0;
+}
+
+.amount-control input {
+  flex: 1;
+  text-align: center;
+  min-height: 44px;
+}
+
+@media (max-width: 768px) {
+  .amount-btn {
+    width: 48px;
+    height: 48px;
+    font-size: 1.5rem;
+  }
+  
+  .amount-control {
+    gap: 12px;
+  }
+}

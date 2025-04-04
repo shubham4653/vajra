@@ -27,42 +27,48 @@ class BuyTokens extends Component {
       <div className="buy-tokens-container">
         <h2>Buy Tokens</h2>
         <form onSubmit={this.handleSubmit}>
-          <div className="form-group">
-            <label>Token Type</label>
-            <select
-              name="selectedToken"
-              value={this.state.selectedToken}
-              onChange={this.handleInputChange}
-            >
-              <option value="VAJRA">VAJRA</option>
-              <option value="CLASS">CLASS</option>
-            </select>
-          </div>
-
+          
           <div className="form-group">
             <label>Amount</label>
-            <input
-              type="number"
-              name="amount"
-              value={this.state.amount}
-              onChange={this.handleInputChange}
-              placeholder="Enter amount"
-              min="1"
-              required
-            />
+            <div className="amount-control">
+              <button 
+                type="button" 
+                className="amount-btn minus"
+                onClick={() => this.setState(prev => ({ amount: Math.max(1, (parseInt(prev.amount) || 0) - 1) }))}
+                onMouseDown={this.startDecrement}
+                onMouseUp={this.clearInterval}
+                onMouseLeave={this.clearInterval}
+                onTouchStart={this.startDecrement}
+                onTouchEnd={this.clearInterval}
+              >
+                -
+              </button>
+              <input
+                type="number"
+                name="amount"
+                value={this.state.amount}
+                onChange={this.handleInputChange}
+                placeholder="Enter amount"
+                min="1"
+                required
+              />
+              <button 
+                type="button" 
+                className="amount-btn plus"
+                onClick={() => this.setState(prev => ({ amount: (parseInt(prev.amount) || 0) + 1 }))}
+                onMouseDown={this.startIncrement}
+                onMouseUp={this.clearInterval}
+                onMouseLeave={this.clearInterval}
+                onTouchStart={this.startIncrement}
+                onTouchEnd={this.clearInterval}
+              >
+                +
+              </button>
+            </div>
           </div>
 
-          <div className="form-group">
-            <label>Payment Method</label>
-            <select
-              name="paymentMethod"
-              value={this.state.paymentMethod}
-              onChange={this.handleInputChange}
-            >
-              <option value="credit_card">Credit Card</option>
-              <option value="crypto">Cryptocurrency</option>
-              <option value="bank_transfer">Bank Transfer</option>
-            </select>
+          <div className="token-summary">
+            You are purchasing: {this.state.amount || 0} {this.state.selectedToken} tokens
           </div>
 
           <button type="submit" className="buy-btn">
