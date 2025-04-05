@@ -10,7 +10,6 @@ Block-Shield solves the growing issue of bot-generated traffic and server abuse 
 
 - *Token-Based Access Control* – Users need tokens in their MetaMask wallet to make requests.
 - *Blockchain-Backed Rate Limiting* – Transparent, secure, and tamper-proof logic using smart contracts.
-- *AI-Driven Bot Detection* – Optional integration of machine learning models to filter suspicious traffic.
 - *Ideal for APIs, Gaming Servers, and High-Security Sites* – Prevents spam and DDoS attacks effectively.
 
 ## 💡 Use Cases
