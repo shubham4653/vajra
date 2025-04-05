@@ -1,78 +1,45 @@
-<<<<<<< HEAD
-VAJRA
-=======
-<<<<<<< HEAD
-# vajra
-=======
-# Getting Started with Create React App
+# 🚀 Block-Shield (VAJRA)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A blockchain-based, tokenized rate-limiting system that defends servers against bot abuse, spam, and DDoS attacks. Built on Ethereum with integrated AI-enhanced traffic analysis.
 
-## Available Scripts
+## 🛡 What is Block-Shield?
 
-In the project directory, you can run:
+Block-Shield solves the growing issue of bot-generated traffic and server abuse by introducing a decentralized, token-based rate-limiting mechanism. Users must hold and burn tokens via Ethereum smart contracts to access sensitive services, ensuring only legitimate users can pass through.
 
-### `npm start`
+## 🔐 Key Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- *Token-Based Access Control* – Users need tokens in their MetaMask wallet to make requests.
+- *Blockchain-Backed Rate Limiting* – Transparent, secure, and tamper-proof logic using smart contracts.
+- *AI-Driven Bot Detection* – Optional integration of machine learning models to filter suspicious traffic.
+- *Ideal for APIs, Gaming Servers, and High-Security Sites* – Prevents spam and DDoS attacks effectively.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 💡 Use Cases
 
-### `npm test`
+- Protecting public APIs
+- Preventing DDoS attacks on shopping/financial platforms
+- Throttling access to high-demand services
+- Securing sensitive data or endpoints
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🧱 Tech Stack
 
-### `npm run build`
+- *Frontend*: React.js
+- *Backend*: Express.js
+- *Blockchain*: Solidity, Hardhat, Ethers.js
+- *Database*: MongoDB
+- *Auth & Wallet Integration*: MetaMask
+- *Others*: WebSocket
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🧪 How It Works
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Users log in/signup using MetaMask and details are stored in MongoDB.
+2. Each request to the backend is validated through a smart contract.
+3. If the user has enough token balance, the request is allowed; else it’s blocked.
+4. Tokens are burned for each request, ensuring accountability and discouraging spamming.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 👨‍💻 Contributors
 
-### `npm run eject`
+- *Ananti* – Smart Contracts, Backend  
+- *Abhishek Bhardwaj* – Database, Backend  
+- *Madhur Tiwari* – Styling, Design  
+- *Shubham Awari* – Frontend, Backend  
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
->>>>>>> bf4d83a29d8a7c367ea87b8038a0cd5c433ac3e3
->>>>>>> f68aa0a0d6ca8d29561cb7a6bd618d03b4425626
