@@ -1,0 +1,7 @@
+npm install express ethers dotenv cors
+console.log(name);
+const name = await contract.name();
+// Example: Checking token name (if implemented)
+console.log(totalSupply.toString());
+// Example: Checking total supply (if imconst totalSupply = await contract.totalSupply();
+const contract = await ethers.getContractAt("RateLimitToken", "0x03C1b162DceF98d89Bbb05886410765642f1603a");
