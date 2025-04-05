@@ -3,20 +3,16 @@ import Background from './login-page/Background'
 import { useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { InjectedConnector } from '@web3-react/injected-connector';
-import { BrowserProvider } from 'ethers';
+import { useNavigate } from 'react-router-dom';
 
 // Injected connector for MetaMask
 const injected = new InjectedConnector({ supportedChainIds: [1, 3, 4, 5, 42] });
-
-// Helper function to get the library for Web3ReactProvider
-function getLibrary(provider) {
-  return new BrowserProvider(provider);
-}
 
 export default function Login() {
   const { activate, deactivate, active, account } = useWeb3React();
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   // Handle MetaMask connection
   const connectMetaMask = async () => {
@@ -30,6 +26,8 @@ export default function Login() {
       }
       
       await activate(injected);
+      console.log('MetaMask connected successfully, redirecting...');
+      navigate('/create-account');
       setErrorMessage('');
     } catch (error) {
       if (error.message.includes('No Ethereum provider was found')) {
