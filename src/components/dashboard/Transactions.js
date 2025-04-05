@@ -1,49 +1,69 @@
 import React, { useState, useEffect } from 'react';
 import './Transactions.css';
-import { formatEther, parseEther } from 'ethers';
+import { BrowserProvider, formatEther } from 'ethers';
 
 const Transactions = ({ account }) => {
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchTransactionHistory = async () => {
       try {
-        // Replace with actual blockchain transaction fetching logic
-        const mockTransactions = [
-          { 
-            hash: '0x123...456',
-            type: 'Buy', 
-            token: 'VAJRA', 
-            amount: 100, 
-            value: parseEther('0.1'),
-            date: new Date('2023-05-15'), 
-            status: 'Confirmed',
-            block: 1234567
-          },
-          { 
-            hash: '0x789...012',
-            type: 'Sell', 
-            token: 'VAJRA', 
-            amount: 50, 
-            value: parseEther('0.05'),
-            date: new Date('2023-05-14'), 
-            status: 'Confirmed',
-            block: 1234566
-          }
-        ];
+        if (!account) {
+          setError('Wallet not connected');
+          setIsLoading(false);
+          return;
+        }
+
+        // Initialize provider
+        console.log('Initializing provider...');
+        const provider = new BrowserProvider(window.ethereum);
         
-        setTransactions(mockTransactions);
+        // Get network
+        console.log('Getting network info...');
+        const network = await provider.getNetwork();
+        console.log('Network:', network);
+        
+        // Fetch transactions using Etherscan API
+        console.log('Fetching transactions for account:', account);
+        const response = await fetch(
+          `https://api.etherscan.io/api?module=account&action=txlist&address=${account}&startblock=0&endblock=99999999&sort=desc&apikey=56UCI8KEPH59ZHPNV8TP634TXXFSW8AF8M`
+        );
+        
+        console.log('API response status:', response.status);
+        const data = await response.json();
+        console.log('API response data:', data);
+        
+        if (data.status !== '1') {
+          const errorMsg = data.message || 'Failed to fetch transactions';
+          console.error('Etherscan API error:', errorMsg, data);
+          throw new Error(errorMsg);
+        }
+
+        // Format transactions
+        const formattedTxs = data.result.map(tx => ({
+          hash: tx.hash,
+          type: tx.from.toLowerCase() === account.toLowerCase() ? 'Send' : 'Receive',
+          token: 'ETH',
+          amount: formatEther(tx.value),
+          value: tx.value,
+          date: new Date(tx.timeStamp * 1000),
+          status: tx.isError === '0' ? 'Confirmed' : 'Failed',
+          block: tx.blockNumber
+        }));
+
+        setTransactions(formattedTxs);
+        setError(null);
       } catch (error) {
         console.error('Error fetching transactions:', error);
+        setError(error.message);
       } finally {
         setIsLoading(false);
       }
     };
 
-    if (account) {
-      fetchTransactionHistory();
-    }
+    fetchTransactionHistory();
   }, [account]);
 
   const formatDate = (date) => {

@@ -1,104 +1,158 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useWeb3React } from '@web3-react/core';
-import Background from './login-page/Background';
 import './CreateAcc.css';
+import Background from './login-page/Background';
+import { useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import authService from '../services/auth';
+import { AuthContext } from '../App';
 
 export default function CreateAcc() {
-  const { account } = useWeb3React();
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
-    fname: '',
-    lname: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
-    walletAddress: account || ''
+    confirmPassword: '',
+    walletAddress: '' // Added wallet address field
   });
-  const [error, setError] = useState('');
+
+  // Get wallet address from URL params if coming from MetaMask flow
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const walletAddress = params.get('wallet');
+    if (walletAddress) {
+      setFormData(prev => ({...prev, walletAddress}));
+    }
+  }, []);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isRegistering, setIsRegistering] = useState(false);
+  const navigate = useNavigate();
+  const { setIsAuthenticated, setUser } = useContext(AuthContext);
 
   const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [id]: value
-    }));
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value
+    });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsRegistering(true);
+    setErrorMessage('');
+
+    if (formData.password !== formData.confirmPassword) {
+      setErrorMessage('Passwords do not match');
+      setIsRegistering(false);
+      return;
+    }
 
     try {
-      // Save form data to local JSON file
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      users.push(formData);
-      localStorage.setItem('users', JSON.stringify(users));
+      const userData = await authService.register({
+        walletAddress: formData.walletAddress,
+        username: formData.username,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password
+      });
+
+      // Add wallet credential if coming from MetaMask flow
+      if (formData.walletAddress) {
+        await authService.addCredential({
+          userId: userData.user.id,
+          type: 'wallet',
+          value: formData.walletAddress
+        });
+      }
+      setUser(userData.user);
+      setIsAuthenticated(true);
       navigate('/dashboard');
-    } catch (err) {
-      setError('Failed to save account locally: ' + err.message);
+    } catch (error) {
+      setErrorMessage(error.message || 'Registration failed. Please try again.');
+      console.error('Registration error:', error);
+    } finally {
+      setIsRegistering(false);
     }
   };
 
   return (
-    <div>
+    <>
       <Background />
       <div className="container">
-        <div className="logo">Create Account</div>
+        <div className="logo">Vajra</div>
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              id="username"
+            <input 
+              type="text" 
+              id="username" 
               value={formData.username}
               onChange={handleChange}
-              required
+              required 
             />
           </div>
-          <div className="input-group input-group-2 input-22">
-            <label htmlFor="fname">First Name</label>
-            <input
-              type="text"
-              id="fname"
-              value={formData.fname}
+          <div className="input-group">
+            <label htmlFor="firstName">First Name</label>
+            <input 
+              type="text" 
+              id="firstName" 
+              value={formData.firstName}
               onChange={handleChange}
-              required
+              required 
             />
           </div>
-          <div className="input-group input-group-2">
-            <label htmlFor="lname">Last Name</label>
-            <input
-              type="text"
-              id="lname"
-              value={formData.lname}
+          <div className="input-group">
+            <label htmlFor="lastName">Last Name</label>
+            <input 
+              type="text" 
+              id="lastName" 
+              value={formData.lastName}
               onChange={handleChange}
-              required
+              required 
             />
           </div>
           <div className="input-group">
             <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
+            <input 
+              type="email" 
+              id="email" 
               value={formData.email}
               onChange={handleChange}
-              required
+              required 
             />
           </div>
           <div className="input-group">
             <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
+            <input 
+              type="password" 
+              id="password" 
               value={formData.password}
               onChange={handleChange}
-              required
+              required 
             />
           </div>
-          {error && <p className="error">{error}</p>}
-          <button type="submit" className="btn">Create Account</button>
+          <div className="input-group">
+            <label htmlFor="confirmPassword">Confirm Password</label>
+            <input 
+              type="password" 
+              id="confirmPassword" 
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required 
+            />
+          </div>
+          {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+          <button 
+            type="submit" 
+            className="btn"
+            disabled={isRegistering}
+          >
+            {isRegistering ? 'Creating account...' : 'Create Account'}
+          </button>
         </form>
+        <div className="link">Already have an account?</div>
       </div>
-    </div>
+    </>
   );
 }
